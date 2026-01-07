@@ -142,7 +142,7 @@ void loop()
     lcd.setCursor(0, 1);
     lcd.print(String(selectedTime) + " hour");
     delay(1000);
-    if (digitalRead(reset) == 1) { // if the button is pressed, new feed time save and return to countdown mode
+    if (digitalRead(reset) == 0) { // if the button is pressed, new feed time save and return to countdown mode
       feedtime = selectedTime * multiplier;
       lcd.clear();
       lcd.setCursor(0, 0);
@@ -236,7 +236,7 @@ void feed()
     }
 
     // if the button is pressed while the countdown is active, we bring the status to 0, that is, the time setting mode and remove it from the countdown.
-    if (digitalRead(reset) == 1) {
+    if (digitalRead(reset) == 0) {
       status = 0;
       break;
     }
