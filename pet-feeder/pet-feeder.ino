@@ -1,15 +1,16 @@
 // Wifi and Blynk
-#define BLYNK_TEMPLATE_ID           "Your template ID"
-#define BLYNK_DEVICE_NAME           "Your device name"
-#define BLYNK_AUTH_TOKEN            "Your auth token"
+#define BLYNK_TEMPLATE_ID "TMPL29s6kB3zH"
+#define BLYNK_TEMPLATE_NAME "Pet Feeder"
+#define BLYNK_AUTH_TOKEN "D0vcl-H8mgNZZHs_anNblgVs6wXCIYgv"
 #define BLYNK_FIRMWARE_VERSION      "0.1.0"
 
 #define BLYNK_PRINT Serial
 #include <ESP8266WiFi.h>
 #include <BlynkSimpleEsp8266.h>
 char auth[] = BLYNK_AUTH_TOKEN;
-char ssid[] = "Your Wifi Name";
-char pass[] = "Your Wifi Pass";
+char ssid[] = "TP-Link_0B8A";
+char pass[] = "94095364";
+
 
 WiFiEventHandler gotIpEventHandler, disconnectedEventHandler;
 int checkPeriod = 1800000; // Check Blynk connection every 30 minutes (1800000 millisecond)
