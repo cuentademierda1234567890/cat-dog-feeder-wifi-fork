@@ -1,8 +1,9 @@
 // Wifi and Blynk
+
 #define BLYNK_TEMPLATE_ID "TMPL29s6kB3zH"
 #define BLYNK_TEMPLATE_NAME "Pet Feeder"
 #define BLYNK_AUTH_TOKEN "D0vcl-H8mgNZZHs_anNblgVs6wXCIYgv"
-#define BLYNK_FIRMWARE_VERSION      "0.1.0"
+#define BLYNK_FIRMWARE_VERSION "0.1.0"
 
 #define BLYNK_PRINT Serial
 #include <ESP8266WiFi.h>
@@ -10,7 +11,6 @@
 char auth[] = BLYNK_AUTH_TOKEN;
 char ssid[] = "TP-Link_0B8A";
 char pass[] = "94095364";
-
 
 WiFiEventHandler gotIpEventHandler, disconnectedEventHandler;
 int checkPeriod = 1800000; // Check Blynk connection every 30 minutes (1800000 millisecond)
@@ -20,32 +20,31 @@ int blynktimevalue;
 
 // Blynk connection check
 void CheckBlynk(){
-  if (WiFi.status() == WL_CONNECTED) { // if wifi connected
+  if (WiFi.status() == WL_CONNECTED) {
     BlynkStatus = Blynk.connected();
-    if(!BlynkStatus == 1){ // if Blynk disconnected
+    if(!BlynkStatus == 1){
       Blynk.config(auth, BLYNK_DEFAULT_DOMAIN, BLYNK_DEFAULT_PORT);
-      Blynk.connect(5000); // connect Blynk
+      Blynk.connect(5000);
     }
   } else {
-    Blynk.disconnect(); // if wifi is not connected Blynk disconnect
+    Blynk.disconnect();
   }
 }
-// //Wifi and Blynk
 
+// EEPROM
 #include <EEPROM.h>
 #define EEPROM_SIZE 512
 
-#include <Wire.h> 
+#include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 #include <Servo.h>
 
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 Servo motor;
 
-
-long defaultTime = 21600; // default feeding time // 6 hour (21600 second)
+long defaultTime = 21600;
 int multiplier = 3600;
-bool status = 1; // status 1 = feeding countdown mode / status 0 = time setting mode // will work in feeding mode at first (ex: countdown will start after power failure)
+bool status = 1;
 bool settingsactive = 0;
 long feedtime = defaultTime;
 long selectedTime = 0;
@@ -56,7 +55,6 @@ bool restartbtn = 0;
 #define pot A0
 #define reset D7
 
-// EEPROM - a read-only memory whose contents can be erased and reprogrammed using a pulsed voltage //
 long eeprom_val;
 long EEPROMReadlong(long address) {
   long four = EEPROM.read(address);
@@ -76,24 +74,20 @@ void EEPROMWritelong(int address, long value) {
   EEPROM.write(address + 2, two);
   EEPROM.write(address + 3, one);
 }
-// write the last time of the countdown to eeprom memory
-void eeprom(){
-    EEPROMWritelong(0, feedtime);
-    EEPROM.commit();
-}
-// /EEPROM //
 
+void eeprom() {
+  EEPROMWritelong(0, feedtime);
+  EEPROM.commit();
+}
 
 void setup()
 {
   Serial.begin(115200);
 
-  // Wifi and Blynk
   gotIpEventHandler = WiFi.onStationModeGotIP([](const WiFiEventStationModeGotIP& event){});
   disconnectedEventHandler = WiFi.onStationModeDisconnected([](const WiFiEventStationModeDisconnected& event){});
   WiFi.begin(ssid, pass);
   delay(5000);
-  // //Wifi and Blynk
 
   EEPROM.begin(512);
 
@@ -111,52 +105,59 @@ void setup()
   delay(2000);
   CheckBlynk();
 }
+
 void loop()
 {
-  // Blynk connection check
   if(millis() >= currTime + checkPeriod){
       currTime += checkPeriod;
       CheckBlynk();
   }
-  // // Blynk
-  
-  // if the status is 1, that is, if the feeding is in countdown mode, we run the food function
+
   if (status == 1) {
     if(settingsactive == 0){
       eeprom_val = EEPROMReadlong(0);
-      if(int(eeprom_val) == 0 || isnan(int(eeprom_val)) || int(eeprom_val) < 0 || int(eeprom_val) > 36000){ // if eeprom data is wrong
+      if(int(eeprom_val) == 0 || isnan(int(eeprom_val)) || int(eeprom_val) < 0 || int(eeprom_val) > 36000){
         feed();
-      } else { // if it's not wrong, get bait time from eeprom
+      } else {
         feedtime = eeprom_val;
         feed();
       }
     }
-  } else { // if the state is 0, in the time setting mode, we get the time from the user with the potentiometer.
+  } else {
     Blynk.run();
     settingsactive = 1;
     lcd.clear();
+
     selectedTime = analogRead(pot);
     selectedTime = map(selectedTime, 0, 1023, 10, 0);
+
     lcd.setCursor(0, 0);
     lcd.print("Food Time:");
     lcd.setCursor(0, 1);
     lcd.print(String(selectedTime) + " hour");
+
+    // delay(200);
     delay(1000);
-    if (digitalRead(reset) == 0) { // if the button is pressed, new feed time save and return to countdown mode
+
+    if (digitalRead(reset) == LOW) {
       feedtime = selectedTime * multiplier;
+
+      // EEPROMWritelong(0, 800000); mi prueba código hardcoded
+
       lcd.clear();
       lcd.setCursor(0, 0);
-      lcd.print(String(selectedTime) + " hour");
-      EEPROMWritelong(0, feedtime);
-      EEPROM.commit();
-      delay(1500);
+      lcd.print("Time Saved!");
+      lcd.setCursor(0, 1);
+      lcd.print(String(selectedTime) + " hour set");
+
+      delay(2000);
       status = 1;
+      settingsactive = 0;
     }
   }
 }
 
-// Blynk
-BLYNK_WRITE(V1) { // feed if button pressed from Blynk app
+BLYNK_WRITE(V1) {
   bylnkbtn = param.asInt();
   if (bylnkbtn == 1) {
     servo();
@@ -185,22 +186,18 @@ BLYNK_WRITE(V7) {
     ESP.restart();
   }
 }
-// //Blynk
 
 void feed()
 {
   settingsactive = 0;
 
-  // the countdown will decrease by 1 second until the time becomes 1 and the loop will continue.
   while (feedtime > 0)
   {
-    // Blynk connection check
     if(millis() >= currTime + checkPeriod){
-        currTime += checkPeriod;
-        CheckBlynk();
-        eeprom();
+      currTime += checkPeriod;
+      CheckBlynk();
+      eeprom();
     }
-    // // Blynk
 
     second = feedtime;
     minute = second / 60;
@@ -215,33 +212,27 @@ void feed()
     Blynk.virtualWrite(V2, String(hour) + ":" + String(minute) + ":" + String(second));
 
     delay(1000);
-
-    // every 1 second we decrease the time by 1 second
-    // if the time is 1, it will decrease to 0 below and go to the next step
     feedtime--;
 
-    // when the time is 0, the countdown will be over and the following code will work
     if (feedtime == 0)
     {
       servo();
-
-      // we set the time to start the loop again
-      if (selectedTime == 0) { // If the user has not specified a time, we get the default time
+      if (selectedTime == 0) {
         feedtime = defaultTime;
-      } else { // if the user has specified a time, we equate the time to the time selected by the user
+      } else {
         feedtime = selectedTime * multiplier;
       }
       EEPROMWritelong(0, feedtime);
       EEPROM.commit();
     }
 
-    // if the button is pressed while the countdown is active, we bring the status to 0, that is, the time setting mode and remove it from the countdown.
     if (digitalRead(reset) == 0) {
       status = 0;
       break;
     }
   }
 }
+
 void servo() {
   lcd.clear();
   lcd.setCursor(0, 0);
@@ -250,5 +241,5 @@ void servo() {
   delay(2000);
   motor.write(0);
   delay(2000);
-  Blynk.logEvent("feed_was_given", "The cat is happy!"); // send notification to Blynk app
+  Blynk.logEvent("feed_was_given", "The cat is happy!");
 }
