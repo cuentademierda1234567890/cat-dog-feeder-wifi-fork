@@ -29,6 +29,5 @@
 ![cat-dog-feeder](https://www.oguzhanavci.com/upload/feeder-4.jpg?raw=true)
 ![cat-dog-feeder](https://www.oguzhanavci.com/upload/feeder-5.jpg?raw=true)
 
-### Uyarı!
-- Hobi projesidir. Hatasız çalışma garantisi yoktur. Lütfen evcil hayvanınızı bu tarz projelere güvenerek yalnız bırakmayın.
-- It's a hobby project. There is no guarantee of error-free operation. Please do not leave your pet alone relying on such projects.
+### Warning!
+- This is a hobby project. Error-free operation is not guaranteed. Please do not leave your pets unattended relying solely on devices of this kind.
