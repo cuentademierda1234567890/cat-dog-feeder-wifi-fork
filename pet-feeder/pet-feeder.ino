@@ -80,6 +80,9 @@ void eeprom() {
   EEPROM.commit();
 }
 
+
+
+// Punto de entrada del programa
 void setup()
 {
   Serial.begin(115200);
@@ -113,7 +116,11 @@ void loop()
       CheckBlynk();
   }
 
-  if (status == 1) {
+  // status == 1 [default]
+  // settingsactive == 0 [default]
+
+  if (status == 1)
+  {
     if(settingsactive == 0){
       eeprom_val = EEPROMReadlong(0);
       if(int(eeprom_val) == 0 || isnan(int(eeprom_val)) || int(eeprom_val) < 0 || int(eeprom_val) > 36000){
@@ -128,16 +135,18 @@ void loop()
     settingsactive = 1;
     lcd.clear();
 
+    // Leer valor potenciómetro
     selectedTime = analogRead(pot);
     selectedTime = map(selectedTime, 0, 1023, 10, 0);
 
+    // Mostrar valor pontenciómetro en LCD
     lcd.setCursor(0, 0);
     lcd.print("Food Time:");
     lcd.setCursor(0, 1);
     lcd.print(String(selectedTime) + " hour");
 
-    // delay(200);
-    delay(1000);
+    delay(200);
+    // delay(1000);
 
     if (digitalRead(reset) == LOW) {
       feedtime = selectedTime * multiplier;
@@ -214,6 +223,7 @@ void feed()
     delay(1000);
     feedtime--;
 
+    // Después de restar 1 seg verifico si feedtime llegó a 0 por fin o no...
     if (feedtime == 0)
     {
       servo();
@@ -227,11 +237,17 @@ void feed()
     }
 
     if (digitalRead(reset) == 0) {
+      while (digitalRead(reset) == LOW) {
+        // delay(10); // No hace nada mientras el botón siga presionado
+        yield();
+      }
       status = 0;
       break;
     }
   }
 }
+
+#pragma region Código Servo Motor servo()
 
 void servo() {
   lcd.clear();
@@ -243,3 +259,5 @@ void servo() {
   delay(2000);
   Blynk.logEvent("feed_was_given", "The cat is happy!");
 }
+
+#pragma endregion
