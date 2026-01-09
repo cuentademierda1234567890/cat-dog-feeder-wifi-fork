@@ -2,12 +2,10 @@
 
 - An ESP8266 NodeMCU-based project featuring a programmable countdown timer and online control via the Blynk app.
 
-# hola mundo
-
 ### Video
 [![Otomatik Kedi - Köpek Mama Makinesi (Süre Ayarlı & WiFi ile kontrol) - ESP8266 Nodemcu](https://www.oguzhanavci.com/upload/git-video-cover.jpg)](https://www.youtube.com/watch?v=2BcprNNV_gc "Otomatik Kedi - Köpek Mama Makinesi (Süre Ayarlı & WiFi ile kontrol) - ESP8266 Nodemcu")
 
-### Malzemeler
+### Materials
 - ESP8266 NodeMCU
 - MG996R 13 kg Servo Motor
 - Push Buton
