@@ -1,28 +1,27 @@
 # cat-dog-feeder-wifi
 
-- Otomatik kedi - köpek besleme projesi. Geri sayım ayarlı ve Blynk aracılığı ile online kontrol edilebilir. ESP8266 nodemcu projesidir.
-- Automatic pet feeder. It can be timed and managed online. ESP8266 nodemcu project.
+- An ESP8266 NodeMCU-based project featuring a programmable countdown timer and online control via the Blynk app.
 
 ### Video
 [![Otomatik Kedi - Köpek Mama Makinesi (Süre Ayarlı & WiFi ile kontrol) - ESP8266 Nodemcu](https://www.oguzhanavci.com/upload/git-video-cover.jpg)](https://www.youtube.com/watch?v=2BcprNNV_gc "Otomatik Kedi - Köpek Mama Makinesi (Süre Ayarlı & WiFi ile kontrol) - ESP8266 Nodemcu")
 
 ### Malzemeler
-- ESP8266 nodemcu
+- ESP8266 NodeMCU
 - MG996R 13 kg Servo Motor
 - Push Buton
 - 10K Potansiyometre
-- 16x2 LCD Ekran - I2C
-- Proje birleştirmesinde materyal olarak pringles kutusu ve metal kutu kullanılmıştır. Alternatif materyal kullanılabilir.
+- 16x2 LCD Display - I2C
+- Enclosure: The project was assembled using a Pringles can and a metal tin. Alternative materials may be used.
 
-### Özellikler
-- Geri sayım
-- Son geri sayım süresi EEPROM'a kaydedilir ve kapanıp açılma durumunda oradan okunur
-- Zaman ayarı
-- Blynk uygulama bağlantısı
-- Wifi üzerinden yem verme ve zaman ayarı yapma
-- Yem verme bildirimi
+### Features
+- CountDown
+- Last countdown duration is saved to EEPROM and retrieved after power cycles (reboots).
+- Time adjustment
+- Blynk app integration
+- Remote feeding and time configuration via Wi-Fi.
+- Feeding notification
   
-### Bağlantı
+### Conections
 ![Texto alternativo](/schematic/Circuit%20diagram.jpg)
 ![cat-dog-feeder](https://www.oguzhanavci.com/upload/feeder-1.jpg?raw=true)
 ![cat-dog-feeder](https://www.oguzhanavci.com/upload/feeder-2.jpg?raw=true)
