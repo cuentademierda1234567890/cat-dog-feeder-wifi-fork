@@ -23,6 +23,7 @@
 - Yem verme bildirimi
   
 ### Bağlantı
+![Texto alternativo](/schematic/Circuit%20diagram.jpg)
 ![cat-dog-feeder](https://www.oguzhanavci.com/upload/feeder-1.jpg?raw=true)
 ![cat-dog-feeder](https://www.oguzhanavci.com/upload/feeder-2.jpg?raw=true)
 ![cat-dog-feeder](https://www.oguzhanavci.com/upload/feeder-3.jpg?raw=true)
