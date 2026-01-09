@@ -151,7 +151,8 @@ void loop()
     if (digitalRead(reset) == LOW) {
       feedtime = selectedTime * multiplier;
 
-      // EEPROMWritelong(0, 800000); mi prueba código hardcoded
+      EEPROMWritelong(0, feedtime); // mi prueba código hardcoded
+      EEPROM.commit();
 
       lcd.clear();
       lcd.setCursor(0, 0);
